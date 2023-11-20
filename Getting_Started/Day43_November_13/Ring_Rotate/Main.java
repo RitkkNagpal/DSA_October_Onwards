@@ -16,6 +16,7 @@ public class Main {
         int r = scn.nextInt();
         ringRotate(mat, s, r);
         display(mat);
+        scn.close();
     }
 
     private static void ringRotate(int[][] mat, int s, int r) {
