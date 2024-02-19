@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 public class Main {
     static class Node {
         private int data;
@@ -24,7 +28,6 @@ public class Main {
                 head = nn;
                 tail = nn;
             } else {
-
                 tail = tail.next = nn;
             }
             size++;
@@ -150,7 +153,7 @@ public class Main {
             }
         }
 
-        private Node getNodeAt(int idx) {
+        public Node getNodeAt(int idx) {
             if (size == 0) {
                 System.out.println("Empty List");
                 return null;
@@ -181,147 +184,66 @@ public class Main {
             }
         }
 
-        public int midOfLL() {
-            return midOfLL(head).data;
-        }
-
-        private Node midOfLL(Node head) {
-            Node slow = head;
-            Node fast = head;
-            while (fast.next != null && fast.next.next != null) {
-                slow = slow.next;
-                fast = fast.next.next;
+        public static LinkedList addLL(LinkedList l1, LinkedList l2) {
+            LinkedList res = new LinkedList();
+            int c = addLLHelper(l1.head, l1.size - 1, l2.head, l2.size - 1, res);
+            if (c > 0) {
+                res.addFirst(c);
             }
-            return slow;
+            return res;
         }
 
-        private void removeDuplicatesFromSortedList() {
-            LinkedList newList = new LinkedList();
-            while (this.size != 0) {
-                int data = this.getFirst();
-                if (newList.size == 0 || newList.tail.data != data) {
-                    newList.addLast(data);
-                }
-                this.removeFirst();
+        private static int addLLHelper(Node h1, int pv1, Node h2, int pv2, LinkedList res) {
+            if (h1 == null && h2 == null) {
+                return 0;
             }
 
-            this.head = newList.head;
-            this.tail = newList.tail;
-            this.size = newList.size;
-        }
-
-    }
-
-    public static LinkedList mergeTwoSortedLinkedList(LinkedList l1, LinkedList l2) {
-        LinkedList mergedLinkedList = new LinkedList();
-        Node l1Node = l1.head;
-        Node l2Node = l2.head;
-        while (l1Node != null && l2Node != null) {
-            if (l1Node.data < l2Node.data) {
-                mergedLinkedList.addLast(l1Node.data);
-                l1Node = l1Node.next;
+            if (pv1 == pv2) {
+                int c = addLLHelper(h1.next, pv1 - 1, h2.next, pv2 - 1, res);
+                int val = h1.data + h2.data + c;
+                res.addFirst(val % 10);
+                return val / 10;
+            } else if (pv1 > pv2) {
+                int c = addLLHelper(h1.next, pv1 - 1, h2, pv2, res);
+                int val = h1.data + c;
+                res.addFirst(val % 10);
+                return val / 10;
             } else {
-                mergedLinkedList.addLast(l2Node.data);
-                l2Node = l2Node.next;
+                int c = addLLHelper(h1, pv1, h2.next, pv2 - 1, res);
+                int val = h2.data + c;
+                res.addFirst(val % 10);
+                return val / 10;
             }
+
         }
-
-        while (l1Node != null) {
-            mergedLinkedList.addLast(l1Node.data);
-            l1Node = l1Node.next;
-        }
-
-        while (l2Node != null) {
-            mergedLinkedList.addLast(l2Node.data);
-            l2Node = l2Node.next;
-        }
-        return mergedLinkedList;
-    }
-
-    public static LinkedList mergeSort(LinkedList list) {
-        return mergeSort(list.head, list.tail);
-    }
-
-    private static LinkedList mergeSort(Node head, Node tail) {
-        if (head == tail) {
-            LinkedList list = new LinkedList();
-            list.addLast(head.data);
-            return list;
-        }
-        Node mid = middleOfLL(head, tail);
-        LinkedList left = mergeSort(head, mid);
-        LinkedList right = mergeSort(mid.next, tail);
-        return mergeTwoSortedLinkedList(left, right);
-    }
-
-    private static Node middleOfLL(Node head, Node tail) {
-        if (head != tail || head.next != tail) {
-            return head;
-        }
-        Node slow = head;
-        Node fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        return slow;
-    }
-
-    public static Node kthNodeFromEnd(LinkedList list, int k) {
-        if (list.head == null)
-            return null;
-        Node slow = list.head;
-        Node fast = list.head;
-
-        for (int i = 0; i <= k && fast != null; i++) {
-            fast = fast.next;
-        }
-
-        while (fast != null) {
-            slow = slow.next;
-            fast = fast.next;
-        }
-
-        return slow;
-    }
-
-    private static void removeDuplicatesFromSortedList(LinkedList list) {
-        Node headNode = list.head;
-        Node tailNode = list.head;
-
-        while (true) {
-            Node traversingNode = tailNode;
-            while (traversingNode.next != null && traversingNode.data == traversingNode.next.data) {
-                traversingNode = traversingNode.next;
-            }
-            if (traversingNode.next != null) {
-                tailNode = tailNode.next = traversingNode.next;
-            } else {
-                break;
-            }
-        }
-        tailNode.next = null;
-        list.head = headNode;
-        list.tail = tailNode;
     }
 
     public static void main(String[] args) throws Exception {
         LinkedList list = new LinkedList();
-        list.addLast(2);
-        list.addLast(2);
+        list.addLast(1);
         list.addLast(2);
         list.addLast(3);
-        list.addLast(3);
+        list.addLast(4);
         list.addLast(5);
-        list.addLast(5);
-        list.addLast(5);
-        list.addLast(5);
-        list.addLast(5);
-        System.out.println("List before removing duplicates");
-        list.display();
+        list.addLast(6);
+        list.addLast(7);
+        list.addLast(8);
+        list.addLast(9);
+        list.addLast(10);
+        LinkedList list1 = new LinkedList();
+        list1.addLast(1);
+        LinkedList list2 = new LinkedList();
+        list2.addLast(9);
+        list2.addLast(9);
+        list2.addLast(9);
+        System.out.println("List 1 - ");
+        list1.display();
         System.out.println();
-        // removeDuplicatesFromSortedList(list);
-        list.removeDuplicatesFromSortedList();
-        list.display();
+        System.out.println("List 2 - ");
+        list2.display();
+        System.out.println();
+        System.out.println("Result List");
+        LinkedList resList = LinkedList.addLL(list1, list2);
+        resList.display();
     }
 }

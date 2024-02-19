@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 public class Main {
     static class Node {
         private int data;
@@ -24,7 +28,6 @@ public class Main {
                 head = nn;
                 tail = nn;
             } else {
-
                 tail = tail.next = nn;
             }
             size++;
@@ -150,7 +153,7 @@ public class Main {
             }
         }
 
-        private Node getNodeAt(int idx) {
+        public Node getNodeAt(int idx) {
             if (size == 0) {
                 System.out.println("Empty List");
                 return null;
@@ -179,149 +182,45 @@ public class Main {
                 System.out.print(temp.data + " -> ");
                 temp = temp.next;
             }
+            System.out.println();
         }
 
-        public int midOfLL() {
-            return midOfLL(head).data;
+        Node left;
+
+        public boolean isLLPalindrome() {
+            left = this.head;
+            return isLLPalindromeHelper(this.head, 0);
         }
 
-        private Node midOfLL(Node head) {
-            Node slow = head;
-            Node fast = head;
-            while (fast.next != null && fast.next.next != null) {
-                slow = slow.next;
-                fast = fast.next.next;
+        private boolean isLLPalindromeHelper(Node head, int flag) {
+            if (head == null) {
+                return true;
             }
-            return slow;
-        }
-
-        private void removeDuplicatesFromSortedList() {
-            LinkedList newList = new LinkedList();
-            while (this.size != 0) {
-                int data = this.getFirst();
-                if (newList.size == 0 || newList.tail.data != data) {
-                    newList.addLast(data);
+            boolean res = isLLPalindromeHelper(head.next, flag + 1);
+            if (flag >= this.size / 2) {
+                if (res && head.data == left.data) {
+                    left = left.next;
+                    return true;
                 }
-                this.removeFirst();
+                return false;
             }
-
-            this.head = newList.head;
-            this.tail = newList.tail;
-            this.size = newList.size;
+            return res;
         }
-
-    }
-
-    public static LinkedList mergeTwoSortedLinkedList(LinkedList l1, LinkedList l2) {
-        LinkedList mergedLinkedList = new LinkedList();
-        Node l1Node = l1.head;
-        Node l2Node = l2.head;
-        while (l1Node != null && l2Node != null) {
-            if (l1Node.data < l2Node.data) {
-                mergedLinkedList.addLast(l1Node.data);
-                l1Node = l1Node.next;
-            } else {
-                mergedLinkedList.addLast(l2Node.data);
-                l2Node = l2Node.next;
-            }
-        }
-
-        while (l1Node != null) {
-            mergedLinkedList.addLast(l1Node.data);
-            l1Node = l1Node.next;
-        }
-
-        while (l2Node != null) {
-            mergedLinkedList.addLast(l2Node.data);
-            l2Node = l2Node.next;
-        }
-        return mergedLinkedList;
-    }
-
-    public static LinkedList mergeSort(LinkedList list) {
-        return mergeSort(list.head, list.tail);
-    }
-
-    private static LinkedList mergeSort(Node head, Node tail) {
-        if (head == tail) {
-            LinkedList list = new LinkedList();
-            list.addLast(head.data);
-            return list;
-        }
-        Node mid = middleOfLL(head, tail);
-        LinkedList left = mergeSort(head, mid);
-        LinkedList right = mergeSort(mid.next, tail);
-        return mergeTwoSortedLinkedList(left, right);
-    }
-
-    private static Node middleOfLL(Node head, Node tail) {
-        if (head != tail || head.next != tail) {
-            return head;
-        }
-        Node slow = head;
-        Node fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        return slow;
-    }
-
-    public static Node kthNodeFromEnd(LinkedList list, int k) {
-        if (list.head == null)
-            return null;
-        Node slow = list.head;
-        Node fast = list.head;
-
-        for (int i = 0; i <= k && fast != null; i++) {
-            fast = fast.next;
-        }
-
-        while (fast != null) {
-            slow = slow.next;
-            fast = fast.next;
-        }
-
-        return slow;
-    }
-
-    private static void removeDuplicatesFromSortedList(LinkedList list) {
-        Node headNode = list.head;
-        Node tailNode = list.head;
-
-        while (true) {
-            Node traversingNode = tailNode;
-            while (traversingNode.next != null && traversingNode.data == traversingNode.next.data) {
-                traversingNode = traversingNode.next;
-            }
-            if (traversingNode.next != null) {
-                tailNode = tailNode.next = traversingNode.next;
-            } else {
-                break;
-            }
-        }
-        tailNode.next = null;
-        list.head = headNode;
-        list.tail = tailNode;
     }
 
     public static void main(String[] args) throws Exception {
         LinkedList list = new LinkedList();
-        list.addLast(2);
-        list.addLast(2);
+        list.addLast(1);
         list.addLast(2);
         list.addLast(3);
         list.addLast(3);
-        list.addLast(5);
-        list.addLast(5);
-        list.addLast(5);
-        list.addLast(5);
-        list.addLast(5);
-        System.out.println("List before removing duplicates");
+        list.addLast(3);
+        list.addLast(2);
+        list.addLast(1);
+
+        System.out.println("List: ");
         list.display();
-        System.out.println();
-        // removeDuplicatesFromSortedList(list);
-        list.removeDuplicatesFromSortedList();
-        list.display();
+
+        System.out.printf("Is List Palindrome: %b", list.isLLPalindrome());
     }
 }
